@@ -1,0 +1,67 @@
+button {
+    background: #0069FF;
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 12px 32px;
+    margin: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.36px;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+button:hover {
+    background: #0063CF;
+}
+
+button:focus {
+    box-shadow: 0px 0px 0px 2px #FE5493;
+}
+
+img {
+    width: 100px;
+    display: flex;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.paymentBox {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+
+.paymentModal {
+    box-sizing: border-box;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    cursor: pointer;
+}
+
+.paymentModalInner {
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 6px 0 rgb(0 0 0 / 50%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    padding: 40px;
+    background: #ffffff;
+}
+
+.paymentModal button {
+    display: flex;
+    margin: 0 auto;
+}

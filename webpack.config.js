@@ -1,5 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
     entry: ["./src/index.js"],
@@ -50,6 +54,10 @@ module.exports = {
             filename: "./index.html",
             favicon: "./public/favicon.ico", // favicon 설정
             hash: true,
+        }),
+        new webpack.DefinePlugin({
+            'process.env.CLIENT_KEY': JSON.stringify(process.env.CLIENT_KEY),
+            'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY),
         }),
     ],
     devServer: {

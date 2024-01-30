@@ -3,11 +3,11 @@ import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import CommonCSS from "../css/common.module.css";
 
-// 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요.
-// 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
-const clientKey = "test_ck_5OWRapdA8dmNqJJp1k593o1zEqZK";
-const customerKey = "IiyM24FjYF8aTF8MudjK6";
-// const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+// 구매자의 고유 아이디를 불러와 customerKey로 설정
+const clientKey = process.env.CLIENT_KEY;
+const customerKey = "IiyM24FjYF8aTF8MudjK6"; // 회원가입 시, 설정된 고유 아이디(UUID)
+
+console.log("clientKey: " + clientKey);
 
 const Checkout = ({ setCheckoutModal }) => {
     const [paymentWidget, setPaymentWidget] = useState(null);
@@ -18,6 +18,7 @@ const Checkout = ({ setCheckoutModal }) => {
         const fetchPaymentWidget = async () => {
             try {
                 const loadedWidget = await loadPaymentWidget(clientKey, customerKey);
+                // const loadedWidget = await loadPaymentWidget(clientKey, ANONYMOUS); // 비회원 결제 시
                 setPaymentWidget(loadedWidget);
             } catch (error) {
                 console.error("Error fetching payment widget:", error);
@@ -57,21 +58,21 @@ const Checkout = ({ setCheckoutModal }) => {
     }, [price]);
 
     const handlePaymentRequest = async () => {
-        // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-        // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+        // 결제를 요청하기 전에 orderId, amount를 서버에 저장
+        // (결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도)
         try {
             await paymentWidget?.requestPayment({
-                orderId: nanoid(),
-                orderName: "토스 티셔츠 외 2건",
-                customerName: "김토스",
-                customerEmail: "customer123@gmail.com",
+                orderId: nanoid(), // 주문 당 ID 랜덤 생성
+                orderName: "근로소득 원천징수 영수증 외 1건",
+                // 현재 사용자 정보 조회 후 입력
+                customerName: "김월급",
+                customerEmail: "payday@gmail.com",
                 customerMobilePhone: "01012341234",
                 successUrl: `${window.location.origin}/success`,
                 failUrl: `${window.location.origin}/fail`,
-                _skipAuth: "FORCE_SUCCESS",
             });
         } catch (error) {
-            console.error("Error requesting payment:", error);
+            console.error("에러! :", error);
         }
     };
 
@@ -81,7 +82,6 @@ const Checkout = ({ setCheckoutModal }) => {
                 {/* 결제 UI, 이용약관 UI 영역 */}
                 <div id="payment-widget" />
                 <div id="agreement" />
-                {/* 결제하기 버튼 */}
                 <button onClick={handlePaymentRequest}>결제하기</button>
             </div>
         </div>

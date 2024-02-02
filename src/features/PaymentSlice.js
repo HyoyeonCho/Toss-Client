@@ -14,8 +14,8 @@ const initialState = {
 /* Actions */
 export const postRequest = createAsyncThunk(
   "payment/postRequest",
-  async ({ data }) => {
-    return await APIRequest("POST", "/request", data);
+  async ({ requestData }) => {
+    return await APIRequest("POST", "/request", requestData);
   }
 );
 
@@ -54,7 +54,6 @@ export const PaymentSlice = createSlice({
     });
     builder.addCase(postConfirm.fulfilled, (state, action) => {
       state.confirmRes = action.payload;
-      console.log("컨펌 후 로그: " + JSON.stringify(state.confirmRes));
     });
     builder.addCase(postPayment.fulfilled, (state, action) => {
       state.paymentRes = action.payload;

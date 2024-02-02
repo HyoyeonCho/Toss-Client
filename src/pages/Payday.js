@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Checkout from "../pages/Checkout";
 import CommonCSS from "../css/common.module.css";
 import bong from "../../public/images/봉급이.png";

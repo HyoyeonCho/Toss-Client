@@ -17,15 +17,14 @@ const Checkout = ({ setCheckoutModal }) => {
   const dispatch = useDispatch();
   const payment = useSelector((state) => state.payment);
   const userInfo = useSelector((state) => state.user.userInfo);
-  console.log("payment 객체 " + JSON.stringify(payment));
 
   const [paymentWidget, setPaymentWidget] = useState(null);
 
   useEffect(() => {
-    // 주문 당(Checkout 컴포넌트가 발생될 때마다) 새로운 orderId 생성
+    // 주문 당 새로운 orderId를 생성합니다.
     dispatch(setOrderId(nanoid()));
-    // [임시] orderName과 amount는 사용자가 선택한 항목에 따라 변경되어야 함
-    dispatch(setOrderName("근로소득 원천징수 영수증 외 1건"));
+    // [임시] orderName과 amount는 사용자가 선택한 항목에 따라 변경되어야합니다.
+    dispatch(setOrderName("근로소득 원천징수영수증 외 1건"));
     dispatch(setAmount(5500));
   }, []);
 
@@ -36,7 +35,8 @@ const Checkout = ({ setCheckoutModal }) => {
           clientKey,
           userInfo.customerKey
         );
-        // const loadedWidget = await loadPaymentWidget(clientKey, ANONYMOUS); // 비회원 결제 시
+        // 비회원 결제 시, customerKey대신 토스 SDK의 ANONYMOUS를 사용합니다.
+        // const loadedWidget = await loadPaymentWidget(clientKey, ANONYMOUS);
         setPaymentWidget(loadedWidget);
       } catch (error) {
         console.error("Error:", error);
@@ -63,24 +63,24 @@ const Checkout = ({ setCheckoutModal }) => {
   }, [paymentWidget, payment.amount]);
 
   const handlePaymentRequest = async () => {
-    const data = {
+
+    const requestData = {
       orderId: payment.orderId,
       customerKey: userInfo.customerKey,
       orderName: payment.orderName,
       amount: payment.amount,
     };
 
-    // 사용자가 결제 요청 시, 로그 등록용 API 호출
-    dispatch(postRequest({ data }));
+    // 사용자가 결제를 요청할 시, 서버에 로그를 등록합니다. (필수 X)
+    dispatch(postRequest({ requestData }));
 
     try {
       await paymentWidget?.requestPayment({
         orderId: payment.orderId,
         orderName: payment.orderName,
-        // 현재 사용자 정보 조회 후 입력
-        customerName: "김월급",
-        customerEmail: "payday@gmail.com",
-        customerMobilePhone: "01012341234",
+        customerName: userInfo.name,
+        customerEmail: userInfo.email,
+        customerMobilePhone: userInfo.phone,
         successUrl: `${window.location.origin}/success?orderName=${payment.orderName}`,
         failUrl: `${window.location.origin}/fail`,
       });

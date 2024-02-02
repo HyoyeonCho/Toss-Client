@@ -5,7 +5,6 @@ const SERVER_PORT = process.env.SERVER_PORT;
 const DOMAIN = `http://${SERVER_IP}:${SERVER_PORT}`;
 
 export const APIRequest = async (method, endpoint, data) => {
-  console.log("요청 URL: " + `${DOMAIN}/toss${endpoint}`);
 
   return await axios({
     method,

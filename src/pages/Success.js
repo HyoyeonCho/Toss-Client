@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CommonCSS from "../css/common.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { postConfirm, postPayment } from "../features/PaymentSlice";
+import { useDispatch } from "react-redux";
+import { postConfirm } from "../features/PaymentSlice";
 
 const Success = ({ userInfo }) => {
   // 해당 컴포넌트는 토스의 requestPayment()를 통해 결제창으로 리다이렉트 되고난 뒤, 요청 성공 시 돌아온 successUrl로 지정된 컴포넌트입니다.
@@ -27,39 +27,29 @@ const Success = ({ userInfo }) => {
   // 클라이언트에서 결제 금액을 조작하는 행위를 방지하기 위함입니다.
 
   const confirmPayment = async () => {
-    const confirmData = {
-      orderId: orderId,
-      paymentKey: paymentKey,
-      amount: amount,
-    };
-    // 토스의 결제 승인 API를 요청하는 서버 API를 호출합니다.
-    const result = await dispatch(postConfirm({ confirmData }));
-    const payload = result.payload;
 
-    // 결제 성공/실패 시의 필요 로직을 작성합니다.
-    let payYN;
-    if (payload.status === 200) {
-      setIsConfirmed(true);
-      payYN = "Y";
-    } else {
-      navigate(
-        `/fail?message=${payload.data.message}&code=${payload.data.code}`
-      );
-      payYN = "N";
-    }
-
-    const paymentData = {
+    const data = {
       // orderId, paymentKey는 토스의 결제 조회 및 취소 API를 호출할 때 필요하므로 반드시 서버에 저장합니다.
       orderId: orderId,
       paymentKey: paymentKey,
       customerKey: userInfo.customerKey,
       orderName: orderName,
       amount: amount,
-      payYN: payYN,
     };
 
-    // 최종 결제 결과를 서버에 등록합니다.
-    dispatch(postPayment({ paymentData }));
+    // 토스의 결제 승인 API를 요청하는 서버 API를 호출합니다.
+    const result = await dispatch(postConfirm({ data }));
+    const payload = result.payload;
+
+    // 결제 성공/실패 시의 필요 로직을 작성합니다.
+    if (payload.status === 200) {
+      setIsConfirmed(true);
+    } else {
+      navigate(
+        `/fail?message=${payload.data.message}&code=${payload.data.code}`
+      );
+    }
+
   };
 
   return (

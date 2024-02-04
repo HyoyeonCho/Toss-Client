@@ -14,22 +14,15 @@ const initialState = {
 /* Actions */
 export const postRequest = createAsyncThunk(
   "payment/postRequest",
-  async ({ requestData }) => {
-    return await APIRequest("POST", "/request", requestData);
+  async ({ data }) => {
+    return await APIRequest("POST", "/request", data);
   }
 );
 
 export const postConfirm = createAsyncThunk(
   "payment/postConfirm",
-  async ({ confirmData }) => {
-    return await APIRequest("POST", "/confirm", confirmData);
-  }
-);
-
-export const postPayment = createAsyncThunk(
-  "payment/postPayment",
-  async ({ paymentData }) => {
-    return await APIRequest("POST", "/payment", paymentData);
+  async ({ data }) => {
+    return await APIRequest("POST", "/confirm", data);
   }
 );
 
@@ -54,9 +47,6 @@ export const PaymentSlice = createSlice({
     });
     builder.addCase(postConfirm.fulfilled, (state, action) => {
       state.confirmRes = action.payload;
-    });
-    builder.addCase(postPayment.fulfilled, (state, action) => {
-      state.paymentRes = action.payload;
     });
   },
 });

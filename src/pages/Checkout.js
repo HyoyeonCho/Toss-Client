@@ -64,15 +64,15 @@ const Checkout = ({ setCheckoutModal }) => {
 
   const handlePaymentRequest = async () => {
 
-    const requestData = {
+    const data = {
       orderId: payment.orderId,
       customerKey: userInfo.customerKey,
       orderName: payment.orderName,
       amount: payment.amount,
     };
 
-    // 사용자가 결제를 요청할 시, 서버에 로그를 등록합니다. (필수 X)
-    dispatch(postRequest({ requestData }));
+    // 사용자가 결제를 요청할 시, 서버에 로그를 등록합니다. (선택 사항)
+    dispatch(postRequest({ data }));
 
     try {
       await paymentWidget?.requestPayment({
@@ -87,6 +87,7 @@ const Checkout = ({ setCheckoutModal }) => {
     } catch (error) {
       console.error("Error : ", error);
     }
+
   };
 
   return (
